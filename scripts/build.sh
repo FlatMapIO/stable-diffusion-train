@@ -2,8 +2,13 @@
 
 tag=huodon/kohya-ss:latest
 
-git clone --depth 1 https://github.com/bmaltais/kohya_ss.git
+if [[ ! -d kohya_ss ]]; then
+  git clone --depth 1 https://github.com/bmaltais/kohya_ss.git
+fi
 
 cd kohya_ss
-docker build -t $tag .
+cp ../docker/Dockerfile.local .
+cp ../scripts/install-shared.sh .
+
+docker build -f Dockerfile.local -t $tag .
 docker push $tag
