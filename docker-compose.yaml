@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  kohya-ss-gui:
+    container_name: kohya-ss-gui
+    image: huodong/kohya-ss
+    ports:
+      - 127.0.0.1:3000:3000
+      - 7860:7860
+      - 6006:6006
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    tty: true
+    ipc: host
+    environment:
+      CLI_ARGS: ""
+      SAFETENSORS_FAST_GPU: 1
+      DISPLAY: $DISPLAY
+    tmpfs:
+      - /tmp
+    volumes:
+      - ./kohya_ss:/workspace
+      - ./dataset:/dataset
+      - ./.cache/user:/home/appuser/.cache
+      - ./.cache/triton:/home/appuser/.triton
+      - ./.cache/config:/app/appuser/.config
+      - ./.cache/nv:/home/appuser/.nv
+      - ./.cache/keras:/home/appuser/.keras
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    working_dir: /workspace
